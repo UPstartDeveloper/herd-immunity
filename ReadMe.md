@@ -142,7 +142,20 @@ separated by spaces:
  - If you care about this work, then I humbly ask you to **please star this repository and spread the word with more developers! Thank you!**
 
 ## Running the Tests
+Within the `web/` directory, you can run the tests for this project from the command line, using:
+```
+python manage.py test
+```
+If you would like to add tests of your own and don't know how, please be sure to read the [Django 3.0 documentation on testing](https://docs.djangoproject.com/en/2.2/topics/testing/overview/#).
+If you are writing tests for the `api` package, you may also like to consult the [Django REST Framework documentation](https://www.django-rest-framework.org/api-guide/testing/).
 
+There are also tests for the analysis modules, which can be found in the [web.anaysis](web/analysis) package. They are in the following files:
+
+-  ```test_logger.py```
+- ```test_person.py```
+- ```test_simulation.py```
+
+Each of these modules tests a separate class found in the package. They can be ran by navigating to the directory of the analysis module in the Command Line, and executing ```pytest```.
 
 ## Tech Stack
  - Django - web framework for the backend
@@ -152,6 +165,7 @@ separated by spaces:
  - AWS S3 - file storage for uploading static files
 
 ## Open Source License
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for more details. I welcome all open source efforts!
 
 ## More Resources
 1. Data for virus name, mortality rate, and reproductive rate can be found on [this Guardian article](https://www.theguardian.com/news/datablog/ng-interactive/2014/oct/15/visualised-how-ebola-compares-to-other-infectious-diseases).
