@@ -169,5 +169,12 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for more
 
 ## More Resources
 1. Data for virus name, mortality rate, and reproductive rate can be found on [this Guardian article](https://www.theguardian.com/news/datablog/ng-interactive/2014/oct/15/visualised-how-ebola-compares-to-other-infectious-diseases).
+2. Videos to learn more about the threat of public diseases can be found on the ["About" page of the website](https://herd-immunity.herokuapp.com/about/).
+3. [Bill Gates' latest TED Talk](https://www.ted.com/talks/bill_gates_how_we_must_respond_to_the_coronavirus_pandemic) discusses more about mathematical modelling being used to fight the coronavirus pandemic.
 
 ## Acknowledgements
+This project would not be possible without help from these special individuals below:
+
+- Alan Davis and Jess Dahmen - thank you both for designing and instructing the CS 1.1 course at Make School. That's where this all began!
+- Shashwat Prajjwal - thanks for being my partner on the initial project during CS 1.1.
+- Mom and Dad - thank you for encouraging my interests in medicine and public health early on, especially as a tool to provide service to humanity. 
