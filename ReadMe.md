@@ -2,51 +2,48 @@
 ![Brandmark Image](https://i.postimg.cc/52ZwGXYG/Screen-Shot-2020-04-23-at-10-14-06-AM.png)
 
 ## Table of Contents
-1. [The Why](#the-why)
-2. [Goals](#goals)
+1. [Goals](#goals)
     - [Rules](#rules)
     - [Suggested Analysis Questions](#suggested-analysis-questions)
-3. [Getting Started](#getting-started)
+2. [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Basic Structure](#basic-structure)
     - [Running Analysis Programs (CLI)](#running-analysis-programs-(cli))
     - [Installing Requirements](#installing-requirements)
     - [How to Contribute To This Project](#how-to-contribute-to-this-project)
-4. [Running the Tests](#running-the-tests)
-5. [Tech Stack](#tech-stack)
-6. [Open Source License](#open-source-license)
-7. [More Resources](#resources)
-8. [Acknowledgements](#acknowledgements)
-
-## The Why
-We're going to create a basic simulation of herd immunity by modeling how a virus moves through a population where some (but not all) of a population is vaccinated against this virus.
+3. [Running the Tests](#running-the-tests)
+4. [Tech Stack](#tech-stack)
+5. [Open Source License](#open-source-license)
+6. [More Resources](#resources)
+7. [Acknowledgements](#acknowledgements)
 
 ## Goals
-* Get your data for virus name, mortality rate, and reproductive rate from [this Guardian article](https://www.theguardian.com/news/datablog/ng-interactive/2014/oct/15/visualised-how-ebola-compares-to-other-infectious-diseases).  
-* During every time step of the simulation, **every sick person** should randomly interact with **100 other people** in the population. The chance of a sick person infecting a person that they interact with is the virus's reproductive rate.  Example: if a virus has a reproductive rate of 15, then, on average, a sick person should infect 15 of the 100 people they interact with during that time step.
+This aim of this project will be to address two key issues pertinent to public health today:
+
+1. For the viruses **which no vaccine currently exists**: what are the costs to using herd immunity to resolve the outbreak of epidemic/pandemic diseases?
+2. For the viruses which **vaccines are currently available for**: how much can a high vaccination percentage in a population limit the negative impacts of a disease outbreak?
+
+We're going to create a basic simulation of herd immunity, by modeling how a virus moves through a population where some (but not all) of a population is vaccinated against this virus.
 
 ### Rules
-
+Please read below to better understand how the simulation works.
 1. A sick person only has a chance at infecting healthy, unvaccinated people they encounter.
-1. An infected person cannot infect a vaccinated person.  This still counts as an interaction.  
-1. An infected person cannot infect someone that is already infected.  This still counts as an interaction.
-1. At the end of a time step, an infected person will either die of the infection or get better.  The chance they will die is the percentage chance stored in mortality_rate.  
-1. For simplicity's sake, if the person does not die, we will consider them immune to the virus and change is_vaccinated to True when this happens.  
-1. Dead people can no longer be infected, either.  Any time an individual dies, we should also change their .infected attribute to False.  
-1. All state changes for a person should occur at the **end** of a time step, after all infected persons have finished all of their interactions.  
-1. During the interactions, make note of any new individuals infected on this turn.  After the interactions are over, we will change the .infected attribute of all newly infected individuals to True.  1. Resolve the states of all individuals that started the turn infected by determining if they die or survive the infection, and change the appropriate attributes.  
-1. The simulation should output a logfile that contains a record of every interaction that occurred during the simulation.  We will use this logfile to determine final statistics and answer questions about the simulation.
+2. An infected person cannot infect a vaccinated person.
+3. At the end of a time step, an infected person will either die of the infection or get better. The chance they will die is the percentage chance represented by the virus mortality rate.
+4. For the sake of simplicity, if the person does not die, we will consider them immune to the virus.
+5. Dead people can no longer be infected, either. People who die no longer count as infected.
+6. All state changes for a person should occur at the **end** of a time step, after all infected persons have finished all of their interactions.
+The state of an individual who starts out at the beginning of a time step as infected, is resolved by determining if they survive or succumb to the illness.
+
+*(Written based off the ReadMe instructions produced by Alan Davis and Jess Dahmen, on the [Herd Immunity starter code GitHub repository](https://github.com/Make-School-Courses/CS-1.1-Intro-to-Programming/tree/master/Projects/herdimmunity_starter_term2_2019)).*
 
 ### Suggested Analysis Questions
 
-Once you have successfully run a simulation, use your python skills to answer to analyze the simulation results
+Once a simulation has been run, feel free to use these questions to analyze the simulation results:
 1. What were the inputs you gave the simulation? (Population size, percent vaccinated, virus name, mortality rate,  reproductive rate)
 1. What percentage of the population became infected at some point before the virus burned out?
 1.  What percentage of the population died from the virus?
 1.  Out of all interactions sick individuals had during the entire simulation, how many total interactions did we see where a vaccination saved a person from potentially becoming infected?
-<br>
-<br>
-*When you have answered these questions, please put your answers in a file called 'answers.txt' and commit this to your repo.*
 
 ## Getting Started
 ### Prerequisites
@@ -69,7 +66,8 @@ When you run `simulation.py` with the corresponding command-line arguments neces
 
 ## Running Analysis Programs (CLI)
 
-The program is designed to be run from the command line.  You can do this by running
+The program is designed to be run from the command line.  You can do this by navigating to the ```web/analysis/``` directory. Then,
+execute
 `python3 simulation.py` followed by the command line arguments in the following order,
 separated by spaces:
  {population size} {vacc_percentage} {virus_name} {mortality_rate} {repro_rate} {optional: number of people initially infected (default is 1)}
@@ -104,7 +102,7 @@ separated by spaces:
   Thank you in advance for contributing to this project!
 
   ## Running the Tests
-  Within the `fiercely-souvenir/travelly` directory, you can run the tests for this project from the command line, using:
+  Within the `web/` directory, you can run the tests for this project from the command line, using:
   ```
   python manage.py test
   ```
@@ -116,7 +114,7 @@ separated by spaces:
  - Fork this repository (click the "Fork" button at the top right of the page, then click on your profile image).
  - Clone your forked repository onto your local machine
  ```
- git clone https://github.com/<YOUR_GITHUB_USERNAME>/fiercely-souvenir.git
+ git clone https://github.com/<YOUR_GITHUB_USERNAME>/herd-immunity.git
  ```
  - Start your virtual environment, and be sure to see the 'Installing Requirements' section below to make sure you have all the required dependencies!
 
@@ -144,7 +142,7 @@ separated by spaces:
  - If you care about this work, then I humbly ask you to **please star this repository and spread the word with more developers! Thank you!**
 
 ## Running the Tests
- Tests are not implemented for this site at the moment. Please come back to this section later, I appreciate your patience.
+
 
 ## Tech Stack
  - Django - web framework for the backend
@@ -156,5 +154,6 @@ separated by spaces:
 ## Open Source License
 
 ## More Resources
+1. Data for virus name, mortality rate, and reproductive rate can be found on [this Guardian article](https://www.theguardian.com/news/datablog/ng-interactive/2014/oct/15/visualised-how-ebola-compares-to-other-infectious-diseases).
 
 ## Acknowledgements
