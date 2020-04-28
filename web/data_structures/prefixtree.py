@@ -4,7 +4,7 @@ Credit to Alan Davis for providing the starter code used in implemennting
 this class:
 https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/prefixtree.py
 '''
-from prefixtreenode import PrefixTreeNode
+from .prefixtreenode import PrefixTreeNode
 
 
 class PrefixTree:
@@ -64,7 +64,7 @@ class PrefixTree:
 
         """
         node, length = self._find_node(string)
-        return length == len(string) and node.is_terminal()
+        return length == len(string) and node.is_terminal() is True
 
     def insert(self, string):
         """Insert the given string into this prefix tree.

@@ -4,7 +4,7 @@ Credit to Alan Davis for providing the starter code used in implementing
 this test suite:
 https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/prefixtreenode_test.py
 '''
-from prefixtreenode import PrefixTreeNode
+from .prefixtreenode import PrefixTreeNode
 import unittest
 
 
