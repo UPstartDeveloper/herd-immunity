@@ -69,16 +69,14 @@ class PrefixTree:
     def insert(self, string):
         """Insert the given string into this prefix tree.
            Runtime Complexity:
-           O((nm) + (np)), where n is the size of the trie, m is the length of
-           string being searched as we look for a duplicate, and p is the
-           length of the string being nserted. This runtime depends on calling
-           the contains() method.
-           In the average case it will then also insert the new string, an
-           operation which the runtime depends on thethe size of the trie
-           (i.e. the number of strings already being stored) because will
-           increase the time we spend looking amongst the children of the root
-           node. Also, this second step depends on the length of the new string
-           being added.
+           O(m + p), where m is the length of string being searched as we look
+           for a duplicate, and p is the
+           length of the string being inserted. This runtime depends on the
+           length of the longest string already existing in the trie, as well
+           as upon how much longer the string being inserted is beyond that.
+           In the worst case we need to traverse down the path of the longest
+           string already in our trie, and then add many more nodes after the
+           terminal node on that path as well for the new string.
 
         """
         # make sure the string not already in the tree
@@ -218,14 +216,14 @@ class PrefixTree:
            whole string will no longer be found during depth first searches.
            The runtime of the second step asymptotically grows with the length
            of the key being deleted. Overall the runtime of this method can be
-           expressed as O(k + (n * m)), where k is the length of the string
-           being deleted, and (n * m) represents the time it takes to check if
+           expressed as O(k + m), where k is the length of the string
+           being deleted, and (m) represents the time it takes to check if
            the input string is contained within the trie. In the worst case
            scenario, the key (aka string) being deleted is also the longest
            string in the data structure.
 
         """
-        if self.contains(key) is True:  # O(m * n)
+        if self.contains(key) is True:  # O(m)
             # set the node at the end of key no longer signal end of a node
             last_node, depth = self._find_node(key[-1])  # O(m)
             last_node.terminal = False
@@ -297,4 +295,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main()  # script used to test if PrefixTree works with expected test inputs
