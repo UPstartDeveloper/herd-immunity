@@ -233,6 +233,114 @@ class PrefixTree:
             raise ValueError('Word is not found and cannot be deleted.')
 
 
+class CompactPrefixTree(PrefixTree):
+    """CompactPrefixTree: subclass of PrefixTree, where each node stores the
+       full, unique id number of a person in the Experiment.
+
+    """
+
+    START = 'Virus'
+
+    def __init__(self, virus_name=CompactPrefixTree.START, ids=None):
+        """Initialize this prefix tree and insert the given ids, if any."""
+        # Create a new root node with the start character
+        self.root = PrefixTreeNode(virus_name)
+        # Count the number of ids inserted into the tree
+        self.size = 0
+        # Insert each id, if any were given
+        if ids is not None:
+            for id in ids:
+                self.insert(id)
+
+    def contains(self, id):
+        '''Return True if this prefix tree contains the given id.'''
+        ids = self.ids()
+        return (id in ids is True)
+
+    def insert(self, parent_id, child_id):
+        '''Insert a new child node into the tree.'''
+        # make sure the child_id not already in the tree
+        if self.contains(child_id) is False:
+            # find the node to start adding new id under
+            parent_node, index = self._find_node(parent_id)
+            assert parent_node is not None
+            # add the newly infected person's id in
+            child_node = PrefixTreeNode(child_id)
+            parent_node.add_child(child_id, child_node)
+            # increment size of the tree
+            self.size += 1
+
+    def _find_node(self, id):
+        """Return a pair containing the deepest node in this prefix tree that
+           matches the longest prefix of the given id and the node's depth.
+           The depth returned is equal to the number of prefix characters
+           matched. Search is done iteratively with a loop starting from the
+           root node.
+
+
+        """
+        # Match the empty id
+        if len(id) == 0:
+            return self.root, 0
+        # Start with the root node
+        node = self.root
+        # loop through the letters in id
+        index = 0
+        # on each iteration see it that letter is a child of node
+        while index < len(id) and node.has_child(id[index]) is True:
+            # if it is, then move node to that child, and move to next char
+            node = node.get_child(id[index])
+            index += 1
+        # return the pair of the node and the index
+        return node, index
+
+    def complete(self, prefix):
+        """Return a list of all ids stored in this prefix tree that start
+           with the given prefix id.
+
+        """
+        # Create a list of completions in prefix tree
+        completions = []
+        # Make sure user is not looking for all ids
+        if prefix == '':
+            return self.ids()
+        # init node to start traversal from
+        node = self._find_node(prefix)[0]
+        # if node has an empty id, there are no completions
+        if node.character != '':
+            self._traverse(node, prefix, completions.append)
+        # add remove words equal to the prefix
+        return completions
+
+    def ids(self):
+        """Return a list of all ids stored in this prefix tree.
+
+        """
+        # Create a list of all ids in prefix tree
+        all_ids = []
+        self._traverse(self.root, '', all_ids.append)
+        return all_ids
+
+    def _traverse(self, node, prefix, visit):
+        """Traverse this prefix tree with recursive depth-first traversal.
+           Start at the given node with the given prefix representing its path
+           in this prefix tree and visit each node with the given visit
+           function.
+
+        """
+        if node.is_terminal() is True and len(node.children) == 0:
+            # add the prefix phrase we've built so far
+            visit(prefix)
+        elif node.is_terminal() is True:
+            # add the prefix phrase we've built so far, and keep moving down
+            visit(prefix)
+        for char in node.children.keys():
+            # move to the child node, continually build the id in traversal
+            child = node.get_child(char)
+            id = self._traverse(child, prefix + char, visit)
+
+
+# test script for PrefixTree class
 def create_prefix_tree(strings):
     print(f'strings: {strings}')
 
