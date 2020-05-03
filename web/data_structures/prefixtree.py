@@ -262,7 +262,7 @@ class CompactPrefixTree(PrefixTree):
         # make sure the child_id not already in the tree
         if self.contains(child_id) is False:
             # find the node to start adding new id under
-            parent_node, index = self._find_node(parent_id)
+            parent_node = self._find_node(parent_id)
             assert parent_node is not None
             # add the newly infected person's id in
             child_node = PrefixTreeNode(child_id)
@@ -270,29 +270,40 @@ class CompactPrefixTree(PrefixTree):
             # increment size of the tree
             self.size += 1
 
+    def _traverse_level_order(self, start_node, target_id):
+        """Traverse this binary tree with iterative level-order traversal
+           (BFS). Start at the given node and visit each node with the given
+           function.
+
+       """
+        # Create queue to store nodes not yet traversed in level-order
+        queue = queue.Queue()
+        # Enqueue given starting node
+        queue.put(start_node)
+        # Loop until queue is empty
+        while not len(queue.qsize()) == 0:
+            # Dequeue node at front of queue
+            node = queue.get()
+            # check if this is the node we're looking for
+            id = node.character
+            if id == target_id:
+                return node
+            # Enqueue the node's children as well
+            for next_node in node.children:
+                queue.put(node.children[next_node])
+
     def _find_node(self, id):
-        """Return a pair containing the deepest node in this prefix tree that
-           matches the longest prefix of the given id and the node's depth.
-           The depth returned is equal to the number of prefix characters
-           matched. Search is done iteratively with a loop starting from the
-           root node.
+        """Return the node storing the id, and the depth
+           that was searched to find the value in the tree.
+           Traversal performed using breadth first search.
 
 
         """
-        # Match the empty id
-        if len(id) == 0:
-            return self.root, 0
-        # Start with the root node
-        node = self.root
-        # loop through the letters in id
-        index = 0
-        # on each iteration see it that letter is a child of node
-        while index < len(id) and node.has_child(id[index]) is True:
-            # if it is, then move node to that child, and move to next char
-            node = node.get_child(id[index])
-            index += 1
-        # return the pair of the node and the index
-        return node, index
+        if not self.is_empty():
+            # Traverse tree level-order from root, appending each node's item
+            return self._traverse_level_order(self.root, id)
+        # Return None if the node is not found
+        return None
 
     def complete(self, prefix):
         """Return a list of all ids stored in this prefix tree that start
