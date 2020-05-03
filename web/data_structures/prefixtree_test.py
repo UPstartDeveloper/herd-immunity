@@ -483,7 +483,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         # Verify completions on negative case
         assert tree.complete(PrefixTree.START_CHARACTER) == []
 
-    def test_strings(self):
+    def test_ids(self):
         tree = CompactPrefixTree()
         ids = [123, 234, 456, 567]  # Ids to insert into the tree
         for id in ids:

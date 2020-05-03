@@ -5,6 +5,8 @@ from analysis.virus import Virus
 from web import settings
 from django.utils import timezone
 from django.urls import reverse
+from data_structures.prefixtree import CompactPrefixTree
+from queue import Queue
 
 
 class Experiment(models.Model):
@@ -65,14 +67,21 @@ class Experiment(models.Model):
         return WebSimulation(pop_size, vacc_percentage, virus,
                              initial_infected)
 
+    def store_infected_persons(self, population_tree):
+        """Instaniates and saves instances of InfectedNode related to this
+           Experiment.
+
+        """
+        pass
+
     def run_experiment(self):
         '''Runs through the experiment, and generates time step graphs.'''
         # update Simulation properties with form data
         web_sim = self.generate_web_sim()
         # run through the simulation, collect data to make TimeStep instances
-        time_step_collection = web_sim.run_and_collect(self)
+        data_collection = web_sim.run_and_collect(self)
         # insert new TimeSteps into the db
-        for ts in time_step_collection:
+        for ts in data_collection[:-1]:
             time_step = TimeStep.objects.create(
                 step_id=ts.get('step_id'),
                 total_infected=ts.get('total_infected'),
@@ -85,6 +94,8 @@ class Experiment(models.Model):
                 experiment=ts.get('experiment')
             )
             time_step.save()
+        # initialize population tree of infected persons
+        pass
 
 
 class TimeStep(models.Model):
@@ -119,3 +130,23 @@ class TimeStep(models.Model):
     def __str__(self):
         '''Return a unique phrase identifying the TimeStep.'''
         return f'{self.experiment} Step {self.step_id}'
+
+
+class InfectedNode(models.Model):
+    """
+    A node in the population tree of infected persons. Begins with the root
+    being the virus, then diverges into each person whom was infected by the
+    previous node.
+    """
+    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE,
+                                      help_text="The related Experiment.")
+    identifer = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
+                                 unique=False,
+                                 help_text=("Identifier of the person/virus " +
+                                            "in experiment."))
+    children = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
+                                 help_text="People infected by this node.")
+
+    def __str__(self):
+        '''Return a unique phrase identifying the TimeStep.'''
+        return f'{self.experiment} Population'

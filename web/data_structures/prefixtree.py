@@ -341,7 +341,7 @@ class CompactPrefixTree(PrefixTree):
             # Dequeue node at front of queue
             node = queue.get()
             # Visit the node
-            visit(node.character)
+            visit(node)
             # Enqueue the node's children as well
             for next_node in node.children:
                 queue.put(node.children[next_node])
