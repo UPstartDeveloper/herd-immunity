@@ -270,28 +270,6 @@ class CompactPrefixTree(PrefixTree):
             # increment size of the tree
             self.size += 1
 
-    def _traverse_level_order(self, start_node, target_id):
-        """Traverse this binary tree with iterative level-order traversal
-           (BFS). Start at the given node and visit each node with the given
-           function.
-
-       """
-        # Create queue to store nodes not yet traversed in level-order
-        queue = queue.Queue()
-        # Enqueue given starting node
-        queue.put(start_node)
-        # Loop until queue is empty
-        while not len(queue.qsize()) == 0:
-            # Dequeue node at front of queue
-            node = queue.get()
-            # check if this is the node we're looking for
-            id = node.character
-            if id == target_id:
-                return node
-            # Enqueue the node's children as well
-            for next_node in node.children:
-                queue.put(node.children[next_node])
-
     def _find_node(self, id):
         """Return the node storing the id, and the depth
            that was searched to find the value in the tree.
@@ -301,13 +279,25 @@ class CompactPrefixTree(PrefixTree):
         """
         if not self.is_empty():
             # Traverse tree level-order from root, appending each node's item
-            return self._traverse_level_order(self.root, id)
+            queue = queue.Queue()
+            # Enqueue given starting node
+            queue.put(self.root)
+            # Loop until queue is empty
+            while not len(queue.qsize()) == 0:
+                # Dequeue node at front of queue
+                node = queue.get()
+                # check if this is the node we're looking for
+                node_id = node.character
+                if node_id == id:
+                    return node
+                # Enqueue the node's children as well
+                for next_node in node.children:
+                    queue.put(node.children[next_node])
         # Return None if the node is not found
         return None
 
-    def complete(self, prefix):
-        """Return a list of all ids stored in this prefix tree that start
-           with the given prefix id.
+    def complete(self, id):
+        """Return a list of all ids that fall under a specific id.
 
         """
         # Create a list of completions in prefix tree
@@ -316,7 +306,7 @@ class CompactPrefixTree(PrefixTree):
         if prefix == '':
             return self.ids()
         # init node to start traversal from
-        node = self._find_node(prefix)[0]
+        node = self._find_node(prefix)
         # if node has an empty id, there are no completions
         if node.character != '':
             self._traverse(node, prefix, completions.append)
