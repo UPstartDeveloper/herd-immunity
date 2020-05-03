@@ -4,6 +4,7 @@ from .person import Person
 from .logger import Logger
 from .virus import Virus
 from . import visualizer
+from data_structures.prefixtree import CompactPrefixTree, PrefixTreeNode
 # from simulator.models import Experiment, TimeStep
 random.seed(42)
 
@@ -155,7 +156,7 @@ class Simulation(object):
             if not person.is_alive:
                 dead += 1
         return dead
-    """
+
     def run(self, visualizer):
         ''' This method should run the simulation until all requirements for
             ending the simulation are met.
@@ -203,7 +204,7 @@ class Simulation(object):
 
             time_step_counter += 1
         print(f'The simulation has ended after {time_step_counter} turns.',)
-    """
+
     def time_step(self, time_step_counter):
         ''' This method should contain all the logic for computing
             one time step in the simulation.
@@ -366,11 +367,41 @@ class WebSimulation(Simulation):
         self.next_person_id = pop_size  # Int
         self.virus = virus  # Virus object
         self.initial_infected = initial_infected  # Int
-        self.total_infected = 0  # Int
+        self.total_infected = CompactPrefixTree(virus_name=virus.name)
         self.vacc_percentage = vacc_percentage  # float between 0 and 1
         self.total_dead = 0  # Int
         self.newly_infected = []
         self.population = self._create_population()
+
+    def _create_population(self):
+        '''This method will create the initial population.
+            Args:
+                initial_infected (int): The number of infected people that the
+                simulation will begin with.
+
+            Returns:
+                population: A list of Person objects.
+
+        '''
+        # section off population demographics
+        population = list()
+        number_vaccinated = round(self.vacc_percentage * self.pop_size)
+        total = random.sample(range(self.pop_size), number_vaccinated +
+                              self.initial_infected)
+        # load the initially infected into the tree of infected persons
+        indices_infected = self.random_infected(total)
+        for id in indices_infected:
+            self.total_infected.insert(self.total_infected.root.character, id)
+        # form a list of Persons for the whole population
+        indices_vaccinated = total
+        for index in range(self.pop_size):
+            if index in indices_vaccinated and index not in indices_infected:
+                population.insert(index, Person(index, True))
+            elif index not in indices_vaccinated and index in indices_infected:
+                population.insert(index, Person(index, False, self.virus))
+            else:
+                population.insert(index, Person(index, False))
+        return population
 
     def store_vacc_persons(self, alive):
         """Return people in the population who are alive and vaccinated.
@@ -426,7 +457,7 @@ class WebSimulation(Simulation):
         # return values to init TimeStep fields
         return [
             counter,
-            self.total_infected,
+            self.total_infected.size,
             self.current_infected(),
             self.total_dead,
             len(vaccinated),
@@ -463,6 +494,32 @@ class WebSimulation(Simulation):
             'experiment': experiment
         }
 
+    def interaction(self, person, random_person):
+        """This method should be called any time two living people are selected
+            for an interaction. It assumes that only living people are passed
+            in as parameters.
+
+            Parameters:
+            person1 (person): The initial infected person
+            random_person (person): The person that person1 interacts with.
+
+        """
+
+        assert person.is_alive is True
+        assert random_person.is_alive is True
+
+        if random_person.is_vaccinated:
+            pass
+        elif random_person.infection:
+            pass
+        elif (random_person.infection is None and
+              not random_person.is_vaccinated):
+            num = random.random()
+            if num < self.virus.repro_rate:
+                random_person.infection = self.virus
+                self.newly_infected.append(random_person._id)
+                self.total_infected.insert(person._id, random_person._id)
+
     def run_and_collect(self, experiment):
         """This method should run the simulation until all requirements for
            ending the simulation are met.
@@ -489,6 +546,8 @@ class WebSimulation(Simulation):
                 simulation_should_continue += 1
                 break
             time_step_counter += 1
+        # finally, add the tree of infection spread to the output
+        collection_data.append(self.total_infected)
         return collection_data
 
 
