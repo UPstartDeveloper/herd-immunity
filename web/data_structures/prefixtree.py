@@ -296,49 +296,50 @@ class CompactPrefixTree(PrefixTree):
         # Return None if the node is not found
         return None
 
-    def complete(self, id):
-        """Return a list of all ids that fall under a specific id.
-
-        """
-        # Create a list of completions in prefix tree
-        completions = []
-        # Make sure user is not looking for all ids
-        if prefix == '':
-            return self.ids()
-        # init node to start traversal from
-        node = self._find_node(prefix)
-        # if node has an empty id, there are no completions
-        if node.character != '':
-            self._traverse(node, prefix, completions.append)
-        # add remove words equal to the prefix
-        return completions
-
-    def ids(self):
-        """Return a list of all ids stored in this prefix tree.
-
-        """
-        # Create a list of all ids in prefix tree
-        all_ids = []
-        self._traverse(self.root, '', all_ids.append)
-        return all_ids
-
-    def _traverse(self, node, prefix, visit):
+    def _traverse_in_order(self, node, prefix, visit):
         """Traverse this prefix tree with recursive depth-first traversal.
            Start at the given node with the given prefix representing its path
            in this prefix tree and visit each node with the given visit
            function.
 
         """
-        if node.is_terminal() is True and len(node.children) == 0:
-            # add the prefix phrase we've built so far
-            visit(prefix)
-        elif node.is_terminal() is True:
-            # add the prefix phrase we've built so far, and keep moving down
-            visit(prefix)
-        for char in node.children.keys():
-            # move to the child node, continually build the id in traversal
-            child = node.get_child(char)
-            id = self._traverse(child, prefix + char, visit)
+        pass
+
+    def complete(self, id):
+        """Return a list of all ids that fall under a specific id.
+
+        """
+        pass
+
+    def _traverse_level_order(self, start_node, visit):
+        """Traverse this binary tree with iterative level-order traversal
+           (BFS). Start at the given node and visit each node with the given
+           function.
+
+       """
+        # Create queue to store nodes not yet traversed in level-order
+        queue = queue.Queue()
+        # Enqueue given starting node
+        queue.put(start_node)
+        # Loop until queue is empty
+        while not len(queue.qsize()) == 0:
+            # Dequeue node at front of queue
+            node = queue.get()
+            # Visit the node
+            visit(node)
+            # Enqueue the node's children as well
+            for next_node in node.children:
+                queue.put(node.children[next_node])
+
+    def ids(self):
+        """Return a list of all ids stored in this prefix tree.
+           Implements breadth first search.
+
+        """
+        # Create a list of all ids in prefix tree
+        all_ids = []
+        self._traverse_level_order(self.root, '', all_ids.append)
+        return all_ids
 
 
 # test script for PrefixTree class
