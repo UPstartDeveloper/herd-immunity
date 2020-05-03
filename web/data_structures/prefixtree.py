@@ -296,20 +296,34 @@ class CompactPrefixTree(PrefixTree):
         # Return None if the node is not found
         return None
 
-    def _traverse_in_order(self, node, prefix, visit):
+    def _traverse_pre_order(self, node, id, visit):
         """Traverse this prefix tree with recursive depth-first traversal.
            Start at the given node with the given prefix representing its path
            in this prefix tree and visit each node with the given visit
            function.
 
         """
-        pass
+        if node is not None:
+            # Visit this node's data with given function
+            visit(node.character)
+            # Traverse the subtrees of all the children
+            for next_id in node.children:
+                self._traverse_pre_order_recursive(node.children[next_id],
+                                                   visit)
 
     def complete(self, id):
         """Return a list of all ids that fall under a specific id.
 
         """
-        pass
+        # Create a list of completions in prefix tree
+        completions = []
+        # init node to start traversal from
+        node = self._find_node(id)
+        # if node has an empty string, there are no completions
+        if node.character != '':
+            self._traverse_pre_order(node, id, completions.append)
+        # add remove words equal to the prefix
+        return completions
 
     def _traverse_level_order(self, start_node, visit):
         """Traverse this binary tree with iterative level-order traversal
