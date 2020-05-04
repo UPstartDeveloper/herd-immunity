@@ -5,7 +5,7 @@ from analysis.virus import Virus
 from web import settings
 from django.utils import timezone
 from django.urls import reverse
-from data_structures.prefixtree import CompactPrefixTree
+from data_structures.prefixtree import CompactPrefixTree, PrefixTreeNode
 from queue import Queue
 
 
@@ -67,12 +67,55 @@ class Experiment(models.Model):
         return WebSimulation(pop_size, vacc_percentage, virus,
                              initial_infected)
 
+    def make_basic_node(self, node):
+        """Return an InfectedNode instance with an empty parent field
+           If there is already an InfectedNode instance for the node, retrieve
+           that from the db instead.
+        """
+        if isinstance(node, PrefixTreeNode):
+            infected_node = InfectedNode.objects.create(
+                experiment=self,
+                identifer=node.character
+            )
+            infected_node.save()
+        else:
+            infected_node = node
+
+        return infected_node
+
     def store_infected_persons(self, population_tree):
         """Instaniates and saves instances of InfectedNode related to this
            Experiment.
 
         """
-        pass
+        # Create queue to store nodes not yet traversed in level-order
+        queue = Queue()
+        # Enqueue starting at the virus, and then all the initial infected
+        # virus_node = self.make_basic_node(population_tree.root)
+        virus_node = population_tree.root
+        queue.put(virus_node)
+        # Loop until queue is empty
+        while not queue.qsize() == 0:
+            # Dequeue node at front of queue
+            parent_node = queue.get()
+            # Set the node's children to point to their parent
+            infected_by_parent = list()
+            for node in parent_node.children:
+                # grab instance of PrefixTreeNode
+                child = parent_node.children[node]
+                # enqueue the PrefixTreeNode to be the next parent
+                queue.put(child)
+                # prepare the InfectedNodes for initialization
+                next_node = self.make_basic_node(child)
+                infected_by_parent.append(next_node)
+            # make basic node of the parent
+            parent_node = self.make_basic_node(parent_node)
+            for next_node in infected_by_parent:
+                # point out its relationship to the parent, and save
+                next_node.parent = parent_node
+                next_node.save()
+            # Save the parent in the db
+            parent_node.save()
 
     def run_experiment(self):
         '''Runs through the experiment, and generates time step graphs.'''
@@ -95,7 +138,8 @@ class Experiment(models.Model):
             )
             time_step.save()
         # initialize population tree of infected persons
-        pass
+        population_tree = data_collection[-1]
+        self.store_infected_persons(population_tree)
 
 
 class TimeStep(models.Model):
@@ -138,15 +182,16 @@ class InfectedNode(models.Model):
     being the virus, then diverges into each person whom was infected by the
     previous node.
     """
-    experiment = models.OneToOneField(Experiment, on_delete=models.CASCADE,
-                                      help_text="The related Experiment.")
+    experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE,
+                                   help_text="The related Experiment.")
     identifer = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
                                  unique=False,
                                  help_text=("Identifier of the person/virus " +
                                             "in experiment."))
-    children = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
-                                 help_text="People infected by this node.")
+    parent = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
+                               help_text="Source of this person's infection.",
+                               null=True, blank=True)
 
     def __str__(self):
         '''Return a unique phrase identifying the TimeStep.'''
-        return f'{self.experiment} Population'
+        return f'{self.experiment}: {self.identifer}'
