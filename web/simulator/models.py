@@ -72,14 +72,10 @@ class Experiment(models.Model):
            If there is already an InfectedNode instance for the node, retrieve
            that from the db instead.
         """
-        if isinstance(node, PrefixTreeNode):
-            infected_node = InfectedNode.objects.create(
-                experiment=self,
-                identifer=node.character
-            )
-            infected_node.save()
-        else:
-            infected_node = node
+        infected_node, truth = InfectedNode.objects.get_or_create(
+            experiment=self,
+            identifer=node.character
+        )
 
         return infected_node
 
@@ -91,11 +87,10 @@ class Experiment(models.Model):
         # Create queue to store nodes not yet traversed in level-order
         queue = Queue()
         # Enqueue starting at the virus, and then all the initial infected
-        # virus_node = self.make_basic_node(population_tree.root)
         virus_node = population_tree.root
         queue.put(virus_node)
         # Loop until queue is empty
-        while not queue.qsize() == 0:
+        while queue.qsize() > 0:
             # Dequeue node at front of queue
             parent_node = queue.get()
             # Set the node's children to point to their parent
@@ -190,7 +185,7 @@ class InfectedNode(models.Model):
                                             "in experiment."))
     parent = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
                                help_text="Source of this person's infection.",
-                               null=True, blank=True)
+                               null=True)
 
     def __str__(self):
         '''Return a unique phrase identifying the TimeStep.'''
