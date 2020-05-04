@@ -494,8 +494,8 @@ class CompactPrefixTreeTest(unittest.TestCase):
         print(tree_ids)
         assert len(tree_ids) == (len(ids) + 1)  # Check length only
         # Verify all the inputted ids are in the output
-        for id in tree_ids[1:]:
-            assert id in ids
+        for node in tree_ids[1:]:
+            assert node.character in ids
 
 
 if __name__ == '__main__':

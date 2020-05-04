@@ -257,7 +257,11 @@ class CompactPrefixTree(PrefixTree):
     def contains(self, id):
         '''Return True if this prefix tree contains the given id.'''
         ids = self.ids()
-        return (id in ids)
+        # see if id matches the values of any of the nodes
+        for node in ids:
+            if id == node.character:
+                return True
+        return False
 
     def insert(self, parent_id, child_id):
         '''Insert a new child node into the tree.'''
@@ -354,6 +358,7 @@ class CompactPrefixTree(PrefixTree):
         # Create a list of all ids in prefix tree
         all_ids = []
         self._traverse_level_order(self.root, all_ids.append)
+        print(all_ids)
         return all_ids
 
 
