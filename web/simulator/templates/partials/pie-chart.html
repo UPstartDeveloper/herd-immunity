@@ -2,7 +2,7 @@
 <script>
     $(document).ready(function(){
         // get the data on the TimeStep from the API, using AJAX
-        let endpoint = '/api/{{experiment.id}}/chart/data/'
+        let endpoint = '/api/{{experiment.id}}/charts/time-step/'
         let plotData = []
         let plotLabels = [];
         $.ajax({

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect, JsonResponse
-from .serializers import TimeStepSerializer
-from simulator.models import Experiment, TimeStep
+from .serializers import TimeStepSerializer, InfectedNodeSerializer
+from simulator.models import Experiment, TimeStep, InfectedNode
 
 
 class TimeStepData(APIView):
@@ -24,7 +24,8 @@ class TimeStepData(APIView):
                         data is structured (i.e. html, json)
 
            Returns:
-           HttpResponse: the view of the detail template
+           Response: the data used to make bar charts on the front end
+
         """
         # get all Time Steps related to the Experiment, return the last
         time_step = (
@@ -46,3 +47,28 @@ class TimeStepData(APIView):
                 ]
         }
         return Response(data)
+
+
+class InfectedNodeData(APIView):
+    """
+    View to list the fields and values of all time steps related to an
+    Experiment.
+    """
+    serializer_class = InfectedNodeSerializer
+    authentication_classes = list()
+    permission_classes = list()
+
+    def get(self, request, pk, format=None):
+        """Return a recursively list of all instances of InfectedNode that
+           are related to a certain Experiment.
+
+           request(HttpRequest): the GET request sent to the server
+           pk(int): unique id value of an Experiment instance
+           format(str): the suffix applied to the endpoint to indicate how the
+                        data is structured (i.e. html, json)
+
+           Returns:
+           Response: the data used to make a population tree on the front end
+
+        """
+        pass
