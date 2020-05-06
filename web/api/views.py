@@ -71,4 +71,11 @@ class InfectedNodeData(APIView):
            Response: the data used to make a population tree on the front end
 
         """
-        pass
+        # get all InfectedNodes related to the Experiment
+        experiment = Experiment.objects.get(id=pk)
+        # start with the InfectedNode that holds the virus
+        infected_nodes = InfectedNode.objects.filter(experiment=experiment)
+        virus = infected_nodes.get(identifer=experiment.virus_name)
+        # return the data on the Infected Nodes
+        data = {}
+        return Response(data)
