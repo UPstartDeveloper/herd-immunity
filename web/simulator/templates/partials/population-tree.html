@@ -1,3 +1,19 @@
 <!-- will make use of DRF and D3 here later. Note: canvas id="popTree" -->
 <!-- simulator/templates/partials/population-tree.html -->
-<script></script>
+<script>
+    $(document).ready(function(){
+        // get the data on the InfectedNode instancesfrom the API, using AJAX
+        let endpoint = '/api/{{experiment.id}}/chart/infected-node/'
+        let plotData = []
+        let plotLabels = [];
+        $.ajax({
+            method: "GET",
+            url: endpoint,
+            success: function(data){
+                console.log(data);
+            },
+            error: function(error_data){
+                console.log(error_data)
+            }
+        })
+</script>

@@ -85,8 +85,7 @@ class InfectedNodeData(APIView):
             # start by traversing the children of the root node
             children = data['children']"""
 
-    def define_data(infected_nodes, virus, node=None, data=None,
-                    level=0, index=0):
+    def define_data(node, parent=None, data=None):
         """Organize nodes in a top-down structure, starting from the virus
            node.
 
@@ -110,14 +109,26 @@ class InfectedNodeData(APIView):
         # base case: data needs to be initialized to a dictionary
         if data is None:
             data = {
-                'name': virus.identifer,
-                'children': virus.children
+                'name': node.identifer,
+                'children': node.children
             }
             # begin traversal of other nodes
-            for i in range(len(virus.children)):
-                node = virus.children[i]
-        elif node is not None:
-            pass
+            for i in range(len(node.children)):
+                next_node = node.children[i]
+                self.define_data(infected_nodes, next_node, node, data)
+        # recursive case: child node need to be converted to dictionary
+        else:  # data is not None
+            child_index = parent_node.children.index(node)
+            parent_node.children[child_index] = {
+                'name': node.identifer,
+                'children': node.children
+            }
+            # traverse over their child as well, if needed
+            for i in range(node.children):
+                next_node = node.children[i]
+                self.define_data(infected_nodes, next_node, node, data)
+                # when the recursive call end, return to avoid ending too early
+                return None
         return data
 
     def get(self, request, pk, format=None):
@@ -140,5 +151,6 @@ class InfectedNodeData(APIView):
         virus = infected_nodes.get(identifer=experiment.virus_name)
         # return data on InfectedNodes in a top-down structure
         self.invert_relationships(infected_nodes)
-        data = self.define_data(infected_nodes, virus)
+        data = self.define_data(virus)
+        print(data)
         return Response(data)
