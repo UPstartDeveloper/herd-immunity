@@ -58,6 +58,20 @@ class InfectedNodeData(APIView):
     authentication_classes = list()
     permission_classes = list()
 
+    def invert_node_relationships(self, infected_nodes):
+        """Reorganizes InfectedNode instances such that parent nodes point
+           to children, and not vice versa.
+
+           Parameters:
+           infected_nodes(QuerySet)
+
+           Returns: dict - nested dictionary of virus node.
+                    Contains fields for its id value, and its children
+                    Recursively structured.
+
+        """
+        pass
+
     def get(self, request, pk, format=None):
         """Return a recursively list of all instances of InfectedNode that
            are related to a certain Experiment.
@@ -77,5 +91,5 @@ class InfectedNodeData(APIView):
         infected_nodes = InfectedNode.objects.filter(experiment=experiment)
         virus = infected_nodes.get(identifer=experiment.virus_name)
         # return the data on the Infected Nodes
-        data = {}
+        data = self.invert_node_relationships(infected_nodes)
         return Response(data)
