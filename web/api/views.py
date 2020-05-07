@@ -58,19 +58,67 @@ class InfectedNodeData(APIView):
     authentication_classes = list()
     permission_classes = list()
 
-    def invert_node_relationships(self, infected_nodes):
+    def invert_relationships(self, infected_nodes):
         """Reorganizes InfectedNode instances such that parent nodes point
-           to children, and not vice versa.
+           to children.
 
            Parameters:
            infected_nodes(QuerySet)
 
-           Returns: dict - nested dictionary of virus node.
-                    Contains fields for its id value, and its children
-                    Recursively structured.
+           Returns: None
 
         """
-        pass
+        # give each node a 'children' atttribute
+        for node in infected_nodes:
+            node.children = []
+        # point out parent-child node relationships
+        for node in infected_nodes:
+            parent = node.parent
+            if parent is not None:
+                parent.children.append(node)
+        return None
+
+    """def add_object_to_data(data, doc):
+        '''Inserts new object into the data dictionary.'''
+        found = False
+        while found is not True:
+            # start by traversing the children of the root node
+            children = data['children']"""
+
+    def define_data(infected_nodes, virus, node=None, data=None,
+                    level=0, index=0):
+        """Organize nodes in a top-down structure, starting from the virus
+           node.
+
+           Parameters:
+           infected_nodes(QuerySet):
+                    each has attributes of the InfectedNode model, as well as
+                    a 'children' attribute, which is a list of all the
+                    InfectedNode instances representing those whom they
+                    infected.
+
+           virus(InfectedNode): represents the virus who began infecting other
+                                persons initially. Occupies the root of the
+                                whole nested structure.
+
+           Return: dict - nested dictionary of virus node.
+                   Contains fields for its id value, and its children, then
+                   their children, and so on.
+                   Recursively structured.
+
+        """
+        # base case: data needs to be initialized to a dictionary
+        if data is None:
+            data = {
+                'name': virus.identifer,
+                'children': virus.children
+            }
+            # begin traversal of other nodes
+            for i in range(len(virus.children)):
+                node = virus.children[i]
+        elif node is not None:
+            pass
+        return data
 
     def get(self, request, pk, format=None):
         """Return a recursively list of all instances of InfectedNode that
@@ -90,6 +138,7 @@ class InfectedNodeData(APIView):
         # start with the InfectedNode that holds the virus
         infected_nodes = InfectedNode.objects.filter(experiment=experiment)
         virus = infected_nodes.get(identifer=experiment.virus_name)
-        # return the data on the Infected Nodes
-        data = self.invert_node_relationships(infected_nodes)
+        # return data on InfectedNodes in a top-down structure
+        self.invert_relationships(infected_nodes)
+        data = self.define_data(infected_nodes, virus)
         return Response(data)
