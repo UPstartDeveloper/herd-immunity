@@ -3,8 +3,8 @@
 <script>
     $(document).ready(function(){
         // get the data on the InfectedNode instancesfrom the API, using AJAX
-        let endpoint = '/api/{{experiment.id}}/chart/infected-node/'
-        let plotData = []
+        let endpoint = '/api/{{experiment.id}}/chart/infected-node/';
+        let plotData = [];
         let plotLabels = [];
         $.ajax({
             method: "GET",
@@ -13,7 +13,8 @@
                 console.log(data);
             },
             error: function(error_data){
-                console.log(error_data)
+                console.log(error_data);
             }
-        })
+        });
+    })
 </script>

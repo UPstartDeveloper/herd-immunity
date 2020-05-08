@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 from data_structures.prefixtree import CompactPrefixTree, PrefixTreeNode
 from queue import Queue
+from django.contrib.postgres.fields import ArrayField
 
 
 class Experiment(models.Model):
@@ -74,7 +75,7 @@ class Experiment(models.Model):
         """
         infected_node, truth = InfectedNode.objects.get_or_create(
             experiment=self,
-            identifer=node.character
+            identifier=node.character
         )
 
         return infected_node
@@ -179,14 +180,18 @@ class InfectedNode(models.Model):
     """
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE,
                                    help_text="The related Experiment.")
-    identifer = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
-                                 unique=False,
-                                 help_text=("Identifier of the person/virus " +
-                                            "in experiment."))
+    identifier = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
+                                  unique=False,
+                                  help_text=("Identifier of the person/virus "
+                                             + "in experiment."))
     parent = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
                                help_text="Source of this person's infection.",
                                null=True)
+    children = ArrayField(
+                    models.CharField(
+                        max_length=settings.EXPER_TITLE_MAX_LENGTH,
+                        unique=False), blank=True, null=True)
 
     def __str__(self):
         '''Return a unique phrase identifying the TimeStep.'''
-        return f'{self.experiment}: {self.identifer}'
+        return f'{self.experiment}: {self.identifier}'
