@@ -59,41 +59,6 @@ class InfectedNodeData(APIView):
     authentication_classes = list()
     permission_classes = list()
 
-    def invert_relationships(self, infected_nodes):
-        """Reorganizes InfectedNode instances such that parent nodes point
-           to children.
-
-           Parameters:
-           infected_nodes(QuerySet)
-
-           Returns: None
-
-        """
-        pprint(len(infected_nodes))
-        # give each node a 'children' atttribute
-        for node in infected_nodes:
-            node.children = []
-            node.save()
-        # point out parent-child node relationships
-        for node in infected_nodes:
-            parent = node.parent
-            if parent is not None:
-                if not hasattr(parent, 'children') or len(parent.children) == 0:
-                    parent.children = []
-                    print(f'Created empty list of children on parent {parent.identifier}')
-                parent.children.append(node)
-                print(f'Connected parent {parent.identifier} to child {node.identifier}')
-            else:
-                print(f'InfectedNode {node.identifier} has no parent')
-        return None
-
-    """def add_object_to_data(self, data, doc):
-        '''Inserts new object into the data dictionary.'''
-        found = False
-        while found is not True:
-            # start by traversing the children of the root node
-            children = data['children']"""
-
     def define_data(self, node, parent=None):
         """Organize nodes in a top-down structure, starting from the virus
            node.
@@ -155,5 +120,4 @@ class InfectedNodeData(APIView):
         infected_nodes = list(infected_nodes)
         # return data on InfectedNodes in a top-down structure
         data = self.define_data(virus)
-        pprint(data)
         return Response(data)
