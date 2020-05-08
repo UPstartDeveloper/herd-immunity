@@ -80,11 +80,11 @@ class InfectedNodeData(APIView):
             if parent is not None:
                 if not hasattr(parent, 'children') or len(parent.children) == 0:
                     parent.children = []
-                    print(f'Created empty list of children on parent {parent.identifier}')
+                    print(f'Created empty list of children on parent {parent.identifer}')
                 parent.children.append(node)
-                print(f'Connected parent {parent.identifier} to child {node.identifier}')
+                print(f'Connected parent {parent.identifer} to child {node.identifer}')
             else:
-                print(f'InfectedNode {node.identifier} has no parent')
+                print(f'InfectedNode {node.identifer} has no parent')
         return None
 
     """def add_object_to_data(self, data, doc):
@@ -116,7 +116,7 @@ class InfectedNodeData(APIView):
 
         """
         """temp_data = {
-            'name': node.identifier,
+            'name': node.identifer,
             'children': node.children
         }
         # begin traversal of other nodes
@@ -133,12 +133,14 @@ class InfectedNodeData(APIView):
             parent_node.children[child_index] = temp_data
             # when the recursive call ends, return to avoid ending too early
             return None"""
-        data = {'name': node.identifier}
-        # data['name'] = node.identifier
+        data = {'name': node.identifer}
+        # data['name'] = node.identifer
         # begin traversal of other nodes
         if hasattr(node, 'children'):
             children_data = list()
-            for child_node in node.children:
+            for child_node_id in node.children:
+                # get the actual InfectedNode instance
+                child_node = InfectedNode.objects.get(identifer=child_node_id)
                 child_data = self.define_data(child_node, node)
                 children_data.append(child_data)
             # Equivalent list comprehension:
@@ -165,11 +167,11 @@ class InfectedNodeData(APIView):
         experiment = Experiment.objects.get(id=pk)
         # start with the InfectedNode that holds the virus
         infected_nodes = InfectedNode.objects.filter(experiment=experiment)
-        virus = infected_nodes.get(identifier=experiment.virus_name)
-        # TODO turn query set into python list of InfectedNode objects
+        virus = infected_nodes.get(identifer=experiment.virus_name)
+        # TODO: turn query set into python list of InfectedNode objects
         infected_nodes = list(infected_nodes)
         # return data on InfectedNodes in a top-down structure
-        self.invert_relationships(infected_nodes)
+        # self.invert_relationships(infected_nodes)
         data = self.define_data(virus)
         # data = {}
         # self.define_data(virus, parent=None, data=data)

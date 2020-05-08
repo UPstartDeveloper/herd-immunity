@@ -442,7 +442,7 @@ class WebSimulation(Simulation):
         """Return a report of the results of this time step.
 
            Parameters:
-           counter(int): the numeric identifier of the current step
+           counter(int): the numeric identifer of the current step
 
            Returns:
            str: a verbal record of the TimeStep results
