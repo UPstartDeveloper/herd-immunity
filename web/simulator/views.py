@@ -28,7 +28,8 @@ class ExperimentDetail(DetailView):
     template_name = 'simulator/results.html'
 
     def get(self, request, pk):
-        """Renders a page to show the boarding instructions for a single Trip.
+        """Renders a page to show the information related to a single
+           Experiment.
 
            Parameters:
            request(HttpRequest): the GET request sent to the server
@@ -68,3 +69,24 @@ def show_landing(request):
 def show_about_page(request):
     '''Render the About page of the site, so users can get more info.'''
     return render(request, 'simulator/info.html')
+
+
+class InfectedNodeDetail(DetailView):
+    '''Displays a page with population tree of an Experiment.'''
+    model = Experiment
+    template_name = 'simulator/spread-of-disease.html'
+
+    def get(self, request, pk):
+        """Renders a page to show the spread of disease, using an M-way tree.
+
+           Parameters:
+           request(HttpRequest): the GET request sent to the server
+           pk(int): unique id value of an Experiment instance
+
+           Returns:
+           HttpResponse: the view of the detail template
+
+        """
+        experiment = self.get_queryset().get(pk=pk)
+        context = {'experiment': experiment}
+        return render(request, self.template_name, context)

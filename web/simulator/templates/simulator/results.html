@@ -46,11 +46,11 @@
     </table>
     <hr>
     <!-- Display of Population Tree -->
-    <h4 class="text-center">Spread of Infection Through Population</h4>
-        <canvas id="popTree" width="400" height="250"></canvas>
-        <div id="treeImage"><!-- SVG chart goes here --></div>
-        {% include 'partials/population-tree.html' %}
-    <hr>
+    <h4>How Well Did the Virus Spread?</h4>
+        <a href="{% url 'simulator:infected_node_detail' experiment.id %}">
+            Click here to see the relationships between infected persons!
+        </a>
+        <hr>
     <h3>Final Results</h3>
     <p>Here is the breakdown of the population, at the end of the experiment:</p>
     <h5 class="text-center">Herd Immunity Resistance to {{ experiment.virus_name }} Outbreak</h5>

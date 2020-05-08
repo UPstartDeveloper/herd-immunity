@@ -1,0 +1,38 @@
+<!-- web/simulator/templates/simulator/spread-of-disease.html -->
+{% extends "simulator/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Spread of Infection Through Population</h1>
+        <h2>Experiment: {{ experiment}}</h2>
+        <p class="ml-2"><strong>About This Tree:</strong></p>
+        <ol>
+            <li>This represents the spread of the virus throughout your population.</li>
+            <li>Only those persons who became infected, as well as the virus, are shown on this tree.</li>
+            <li>On this tree, the assumption is made that <i>each person who became infected, caught the disease from only one other person.</i></li>
+            <li>Each person however, <i>is allowed to infected multiple other people.</i></li>
+            <li>This tree reads from left to right. The "root" of this tree, the virus, is located as the leftmost node. It is marked with its name.</li>
+            <li>For ease of your analysis, each node in the tree has a unique id number, randomly assigned to them during the simulation.</li>
+        </ol>
+        <div id="treeImage" class="ml-3">
+            <!-- SVG chart goes here -->
+        </div>
+        {% include 'partials/population-tree.html' %}
+        <div class="row mb-1 mt-3">
+            <!-- Shout out to the D3 Framework. -->
+            <p>
+                Special thanks goes out to the folks at <a href="https://d3js.org">D3.js</a>, for making this visualization possible!
+            </p>
+        </div>
+        <div class="row mb-2">
+            <!-- Links back to more Experiment details and list views -->
+            <a class='ml-1 mr-3 btn btn-primary' href="{% url 'simulator:simulation_detail' experiment.id %}">
+                Back to Experiment
+            </a>
+            <a class="btn btn-secondary" href="{% url 'simulator:list' %}" class="btn btn-primary">
+                See More Simulations
+            </a>
+        </div>
+    </div>
+
+{% endblock %}
