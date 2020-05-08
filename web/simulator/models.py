@@ -75,7 +75,7 @@ class Experiment(models.Model):
         """
         infected_node, truth = InfectedNode.objects.get_or_create(
             experiment=self,
-            identifer=node.character,
+            identifier=node.character,
             children=list(node.children.keys())
         )
 
@@ -181,10 +181,10 @@ class InfectedNode(models.Model):
     """
     experiment = models.ForeignKey(Experiment, on_delete=models.CASCADE,
                                    help_text="The related Experiment.")
-    identifer = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
-                                 unique=False,
-                                 help_text=("identifer of the person/virus "
-                                            + "in experiment."))
+    identifier = models.CharField(max_length=settings.EXPER_TITLE_MAX_LENGTH,
+                                  unique=False,
+                                  help_text=("identifier of the person/virus "
+                                             + "in experiment."))
     parent = models.ForeignKey('InfectedNode', on_delete=models.CASCADE,
                                help_text="Source of this person's infection.",
                                null=True)
@@ -195,4 +195,4 @@ class InfectedNode(models.Model):
 
     def __str__(self):
         '''Return a unique phrase identifying the TimeStep.'''
-        return f'{self.experiment}: {self.identifer}'
+        return f'{self.experiment}: {self.identifier}'
