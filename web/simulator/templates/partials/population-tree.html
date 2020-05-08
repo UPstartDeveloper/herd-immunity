@@ -1,11 +1,10 @@
 <!-- Note: canvas id="popTree" is needed here -->
 <!-- simulator/templates/partials/population-tree.html -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
     $(document).ready(function(){
         // get the data on the InfectedNode instancesfrom the API, using AJAX
         let endpoint = '/api/{{experiment.id}}/chart/infected-node/';
-        let plotData = [];
-        let plotLabels = [];
         $.ajax({
             method: "GET",
             url: endpoint,
@@ -14,6 +13,7 @@
                 treeChart(data);
             },
             error: function(error_data){
+                console.log('error');
                 console.log(error_data);
             }
         });
@@ -21,28 +21,32 @@
 
     // Make a Tree by using D3: https://observablehq.com/@d3/collapsible-tree
     let treeChart = data => {
-        let d3 = require("d3@5");
-        let radius = width / 2;
-        let width = 954;
 
+        // tree params
+        let width = 954;
+        let radius = width / 2;
+
+        // making the tree
         let tree = d3.tree()
             .size([2 * Math.PI, radius])
             .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
+        // bring in the data for the chart
+        //let treeData = data.json().sort((a, b) => d3.ascending(a.data.name, b.data.name));
+        let treeData = d3.hierarchy(data);
 
-        let treeData = d3.hierarchy(data).json()
-            sort((a, b) => d3.ascending(a.treeData.name, b.treeData.name));
-
+        // function: making a box for the chart
         let autoBox = () => {
-              document.body.appendChild(this);
-              const {x, y, width, height} = this.getBBox();
-              document.body.removeChild(this);
-              return [x, y, width, height];
+          document.body.appendChild(this);
+          const {x, y, width, height} = this.getBBox();
+          document.body.removeChild(this);
+          return [x, y, width, height];
         }
 
-        let chart = {
+        // making the chart
+        let chart = () => {
           const root = tree(treeData);
 
-          const svg = d3.create("svg");
+          const svg = d3.create('svg');
 
           svg.append("g")
               .attr("fill", "none")
@@ -89,5 +93,8 @@
 
           return svg.attr("viewBox", autoBox).node();
         }
+        //console.log('about to call chart');
+        chart();
+
     };
 </script>
