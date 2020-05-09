@@ -90,7 +90,8 @@ class InfectedNodeData(APIView):
             children_data = list()
             for child_node_id in node.children:
                 # get the actual InfectedNode instance
-                child_node = InfectedNode.objects.get(identifier=child_node_id)
+                child_node = InfectedNode.objects.get(identifier=child_node_id,
+                                                      parent=node)
                 child_data = self.define_data(child_node, node)
                 children_data.append(child_data)
             # Only add to dict if has children
