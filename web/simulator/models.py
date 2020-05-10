@@ -75,7 +75,7 @@ class Experiment(models.Model):
         """
         infected_node, truth = InfectedNode.objects.get_or_create(
             experiment=self,
-            identifier=node.character,
+            identifier=node.id,
             children=list(node.children.keys())
         )
 

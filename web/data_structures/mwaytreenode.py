@@ -14,12 +14,12 @@ class MWayTreeNode:
     # Choose an appropriate data structure to store children nodes in
     CHILDREN_TYPE = dict  # or list
 
-    def __init__(self, character=None):
-        """Initialize this m-way tree node with the given character value, an
+    def __init__(self, id=None):
+        """Initialize this m-way tree node with the given id value, an
         empty structure of children nodes."""
-        # Character that this node represents
-        self.character = character
-        # Data structure to associate character keys to children node values
+        # id that this node represents
+        self.id = id
+        # Data structure to associate id keys to children node values
         self.children = MWayTreeNode.CHILDREN_TYPE()
 
     def num_children(self):
@@ -30,43 +30,43 @@ class MWayTreeNode:
         """
         return len(self.children.keys())
 
-    def has_child(self, character):
+    def has_child(self, id):
         """Return True if this m-way tree node has a child node that
-           represents the given character amongst its children.
+           represents the given id amongst its children.
 
            Runtime Complexity: O(n)
 
         """
-        return (character in self.children.keys())
+        return (id in self.children.keys())
 
-    def get_child(self, character):
+    def get_child(self, id):
         """Return this m-way tree node's child node that represents the given
-           character if it is amongst its children, or raise ValueError if not.
+           id if it is amongst its children, or raise ValueError if not.
 
            Runtime Complexity: O(n)
 
         """
-        if self.has_child(character) is True:
-            return self.children.get(character)
+        if self.has_child(id) is True:
+            return self.children.get(id)
         else:
-            raise ValueError(f'No child exists for character {character!r}')
+            raise ValueError(f'No child exists for id {id!r}')
 
-    def add_child(self, character, child_node):
-        """Add the given character and child node as a child of this node, or
-           raise ValueError if given character is amongst this node's children.
+    def add_child(self, id, child_node):
+        """Add the given id and child node as a child of this node, or
+           raise ValueError if given id is amongst this node's children.
 
            Runtime Complexity: O(n)
 
         """
-        if self.has_child(character) is False:
-            self.children[character] = child_node
+        if self.has_child(id) is False:
+            self.children[id] = child_node
         else:
-            raise ValueError(f'Child exists for character {character!r}')
+            raise ValueError(f'Child exists for id {id!r}')
 
     def __repr__(self):
         """Return a code representation of this m-way tree node."""
-        return f'MWayTreeNode({self.character!r})'
+        return f'MWayTreeNode({self.id!r})'
 
     def __str__(self):
         """Return a string view of this m-way tree node."""
-        return f'({self.character})'
+        return f'({self.id})'

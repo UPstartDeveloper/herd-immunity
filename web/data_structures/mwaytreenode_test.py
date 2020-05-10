@@ -11,11 +11,11 @@ import unittest
 class MWayTreeNodeStringTest(unittest.TestCase):
 
     def test_init_and_properties(self):
-        character = 'A'
-        node = MWayTreeNode(character)
-        # Verify node character
-        assert isinstance(node.character, str)
-        assert node.character is character
+        id = 'A'
+        node = MWayTreeNode(id)
+        # Verify node id
+        assert isinstance(node.id, str)
+        assert node.id is id
         # Verify children nodes structure
         assert isinstance(node.children, MWayTreeNode.CHILDREN_TYPE)
         assert len(node.children) == 0
@@ -54,11 +54,11 @@ class MWayTreeNodeStringTest(unittest.TestCase):
 
 class MWayTreeNodeIntegerTest(unittest.TestCase):
     def test_init_and_properties(self):
-        character = 0
-        node = MWayTreeNode(character)
-        # Verify node character
-        assert isinstance(node.character, int)
-        assert node.character is character
+        id = 0
+        node = MWayTreeNode(id)
+        # Verify node id
+        assert isinstance(node.id, int)
+        assert node.id is id
         # Verify children nodes structure
         assert isinstance(node.children, MWayTreeNode.CHILDREN_TYPE)
         assert len(node.children) == 0

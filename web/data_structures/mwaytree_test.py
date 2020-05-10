@@ -17,80 +17,80 @@ class MWayTreeTest(unittest.TestCase):
         assert tree.size == 0
         # Verify root node
         assert isinstance(tree.root, MWayTreeNode)
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 0
 
     def test_init_with_integer(self):
         tree = MWayTree(ids=[0])
         # Verify root node
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
         # Verify node 0
         node_0 = tree.root.get_child(0)
-        assert node_0.character == 0
+        assert node_0.id == 0
         assert node_0.num_children() == 0
 
     def test_insert_with_integer(self):
         tree = MWayTree()
         tree.insert('Virus', 0)
         # Verify root node
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
         # Verify node 0
         node_0 = tree.root.get_child(0)
-        assert node_0.character == 0
+        assert node_0.id == 0
         assert node_0.num_children() == 0
         assert node_0.has_child(1) is False
 
     def test_insert_with_4_integers(self):
         tree = MWayTree()
         # Insert new int that starts from root node
-        tree.insert(tree.root.character, 123)
+        tree.insert(tree.root.id, 123)
         # Verify root node
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
         # Verify new node 123
         node_123 = tree.root.get_child(123)
-        assert node_123.character == 123
+        assert node_123.id == 123
         assert node_123.num_children() == 0
         assert node_123.has_child('B') is False
 
         # Insert int with partial overlap so node 'B' has new child node 'D'
         tree.insert(123, 234)
         # Verify root node again
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
         # Verify node 123 again
-        assert node_123.character == 123
+        assert node_123.id == 123
         assert node_123.num_children() == 1
         assert node_123.has_child(234) is True
 
         # Insert another node
         tree.insert('Virus', 456)
         # Verify root node again
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 2
         assert tree.root.has_child(123) is True
         assert tree.root.has_child(456) is True
         # Verify node 123 again
-        assert node_123.character == 123
+        assert node_123.id == 123
         assert node_123.num_children() == 1  # Node 0 still has one child
         assert node_123.has_child(234) is True
 
         # Insert new string with no overlap that starts from root node
         tree.insert(456, 567)
         # Verify root node again
-        assert tree.root.character == MWayTree.START
+        assert tree.root.id == MWayTree.START
         assert tree.root.num_children() == 2  # Root node now has two children
         assert tree.root.has_child(123) is True  # Node 0 is still its child
         assert tree.root.has_child(123) is True  # Node 'X' is its new child
         # Verify new node 567
         node_567 = tree.root.get_child(456).get_child(567)
-        assert node_567.character == 567
+        assert node_567.id == 567
         assert node_567.num_children() == 0
         assert node_567.has_child(678) is False
 
@@ -100,7 +100,7 @@ class MWayTreeTest(unittest.TestCase):
         assert tree.size == 0
         assert tree.is_empty() is True
         # Verify size after first insert
-        tree.insert(tree.root.character, 0)
+        tree.insert(tree.root.id, 0)
         assert tree.size == 1
         assert tree.is_empty() is False
         # Verify size after second insert
@@ -122,11 +122,11 @@ class MWayTreeTest(unittest.TestCase):
         assert tree.size == 0
         assert tree.is_empty() is True
         # Verify size after first insert
-        tree.insert(tree.root.character, 0)
+        tree.insert(tree.root.id, 0)
         assert tree.size == 1
         assert tree.is_empty() is False
         # Verify size after repeating first insert
-        tree.insert(tree.root.character, 0)
+        tree.insert(tree.root.id, 0)
         assert tree.size == 1
         # Verify size after second insert
         tree.insert(0, 1)
@@ -183,14 +183,14 @@ class MWayTreeTest(unittest.TestCase):
         ids = [123, 234, 456, 567]  # Ids to insert into the tree
         for id in ids:
             # Insert new string and add to list of strings already inserted
-            tree.insert(tree.root.character, id)
+            tree.insert(tree.root.id, id)
         # Verify tree can retrieve all strings that have been inserted
         tree_ids = tree.ids()
         print(tree_ids)
         assert len(tree_ids) == (len(ids) + 1)  # Check length only
         # Verify all the inputted ids are in the output
         for node in tree_ids[1:]:
-            assert node.character in ids
+            assert node.id in ids
 
 
 if __name__ == '__main__':

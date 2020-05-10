@@ -18,7 +18,7 @@ class MWayTree:
 
     def __init__(self, virus_name=None, ids=None):
         """Initialize this m-way tree and insert the given ids, if any."""
-        # Create a new root node with the start character
+        # Create a new root node with the start id
         if virus_name is None:
             virus_name = MWayTree.START
         self.root = MWayTreeNode(virus_name)
@@ -34,7 +34,7 @@ class MWayTree:
         ids = self.ids()
         # see if id matches the values of any of the nodes
         for node in ids:
-            if id == node.character:
+            if id == node.id:
                 return True
         return False
 
@@ -78,7 +78,7 @@ class MWayTree:
                 # Dequeue node at front of queue
                 node = queue.get()
                 # check if this is the node we're looking for
-                node_id = node.character
+                node_id = node.id
                 if node_id == id:
                     return node
                 # Enqueue the node's children as well
@@ -96,7 +96,7 @@ class MWayTree:
         """
         if node is not None:
             # Visit this node's data with given function
-            visit(node.character)
+            visit(node.id)
             # Traverse the subtrees of all the children
             for next_id in node.children:
                 self._traverse_pre_order(node.children[next_id], id, visit)

@@ -390,7 +390,7 @@ class WebSimulation(Simulation):
         # load the initially infected into the tree of infected persons
         indices_infected = self.random_infected(total)
         for id in indices_infected:
-            self.total_infected.insert(self.total_infected.root.character, id)
+            self.total_infected.insert(self.total_infected.root.id, id)
         # form a list of Persons for the whole population
         indices_vaccinated = total
         for index in range(self.pop_size):
