@@ -7,15 +7,11 @@ https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/MWa
 
 
 class MWayTreeNode:
-    """MWayTreeNode: A node for use in a prefix tree that stores a single
-       character from a string and a structure of children nodes below it,
-       which associates the next character in a string to the next node along
-       its path from the tree's root node to a terminal node that marks the end
-       of the string.
+    """MWayTreeNode: A node for use in a prefix or m-way tree that stores a
+       single data value. Can have up to m - 1 siblings.
 
     """
-    # Choose an appropriate type of data structure to store children nodes in
-    # Hint: Choosing list or dict affects implementation of all child methods
+    # Choose an appropriate data structure to store children nodes in
     CHILDREN_TYPE = dict  # or list
 
     def __init__(self, character=None):
@@ -25,7 +21,7 @@ class MWayTreeNode:
         self.character = character
         # Data structure to associate character keys to children node values
         self.children = MWayTreeNode.CHILDREN_TYPE()
-        # Marks if this node terminates a string in the prefix tree
+        # Marks if this node terminates a string, if used in a prefix tree
         self.terminal = False
 
     def is_terminal(self):
