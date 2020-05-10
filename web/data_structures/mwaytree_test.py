@@ -4,7 +4,7 @@ Credit to Alan Davis for providing the starter code used in implementing
 this test suite:
 https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/prefixtree_test.py
 '''
-from .prefixtree import PrefixTree, PrefixTreeNode, CompactPrefixTree
+from .mwaytree import PrefixTree, MWayTreeNode, MWayTree
 import unittest
 
 
@@ -16,7 +16,7 @@ class PrefixTreeStringTest(unittest.TestCase):
         assert isinstance(tree.size, int)
         assert tree.size == 0
         # Verify root node
-        assert isinstance(tree.root, PrefixTreeNode)
+        assert isinstance(tree.root, MWayTreeNode)
         assert tree.root.character == PrefixTree.START_CHARACTER
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 0
@@ -300,23 +300,23 @@ class PrefixTreeStringTest(unittest.TestCase):
             tree.delete('CS Rocks!')
 
 
-class CompactPrefixTreeTest(unittest.TestCase):
+class MWayTreeTest(unittest.TestCase):
 
     def test_init_and_properties(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         # Verify tree size property
         assert isinstance(tree.size, int)
         assert tree.size == 0
         # Verify root node
-        assert isinstance(tree.root, PrefixTreeNode)
-        assert tree.root.character == CompactPrefixTree.START
+        assert isinstance(tree.root, MWayTreeNode)
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 0
 
     def test_init_with_integer(self):
-        tree = CompactPrefixTree(ids=[0])
+        tree = MWayTree(ids=[0])
         # Verify root node
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
@@ -327,10 +327,10 @@ class CompactPrefixTreeTest(unittest.TestCase):
         assert node_0.num_children() == 0
 
     def test_insert_with_integer(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         tree.insert('Virus', 0)
         # Verify root node
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
@@ -342,11 +342,11 @@ class CompactPrefixTreeTest(unittest.TestCase):
         assert node_0.has_child(1) is False
 
     def test_insert_with_4_integers(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         # Insert new int that starts from root node
         tree.insert(tree.root.character, 123)
         # Verify root node
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
@@ -360,7 +360,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         # Insert int with partial overlap so node 'B' has new child node 'D'
         tree.insert(123, 234)
         # Verify root node again
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
@@ -373,7 +373,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         # Insert another node
         tree.insert('Virus', 456)
         # Verify root node again
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 2
         assert tree.root.has_child(123) is True
@@ -387,7 +387,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         # Insert new string with no overlap that starts from root node
         tree.insert(456, 567)
         # Verify root node again
-        assert tree.root.character == CompactPrefixTree.START
+        assert tree.root.character == MWayTree.START
         assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 2  # Root node now has two children
         assert tree.root.has_child(123) is True  # Node 0 is still its child
@@ -400,7 +400,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         assert node_567.has_child(678) is False
 
     def test_size_and_is_empty(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         # Verify size after initializing tree
         assert tree.size == 0
         assert tree.is_empty() is True
@@ -422,7 +422,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         assert tree.is_empty() is False
 
     def test_size_with_repeated_insert(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         # Verify size after initializing tree
         assert tree.size == 0
         assert tree.is_empty() is True
@@ -454,7 +454,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
 
     def test_contains(self):
         ids = [123, 234, 456, 567]
-        tree = CompactPrefixTree(ids=ids)
+        tree = MWayTree(ids=ids)
         # Verify contains for all positive cases
         assert tree.contains(123) is True
         assert tree.contains(234) is True
@@ -467,9 +467,9 @@ class CompactPrefixTreeTest(unittest.TestCase):
 
     def test_complete(self):
         ids = [123, 234, 456, 567]
-        tree = CompactPrefixTree(ids=ids)
+        tree = MWayTree(ids=ids)
         # Verify completions for all integers
-        assert tree.complete(CompactPrefixTree.START) == (
+        assert tree.complete(MWayTree.START) == (
             ['Virus', 123, 234, 456, 567]
         )
         # Verify completions for 2nd level nodes
@@ -484,7 +484,7 @@ class CompactPrefixTreeTest(unittest.TestCase):
         assert tree.complete(PrefixTree.START_CHARACTER) == []
 
     def test_ids(self):
-        tree = CompactPrefixTree()
+        tree = MWayTree()
         ids = [123, 234, 456, 567]  # Ids to insert into the tree
         for id in ids:
             # Insert new string and add to list of strings already inserted

@@ -4,7 +4,7 @@ Credit to Alan Davis for providing the starter code used in implemennting
 this class:
 https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/prefixtree.py
 '''
-from .prefixtreenode import PrefixTreeNode
+from .mwaytreenode import MWayTreeNode
 from queue import Queue
 
 
@@ -33,7 +33,7 @@ class PrefixTree:
     def __init__(self, strings=None):
         """Initialize this prefix tree and insert the given strings, if any."""
         # Create a new root node with the start character
-        self.root = PrefixTreeNode(PrefixTree.START_CHARACTER)
+        self.root = MWayTreeNode(PrefixTree.START_CHARACTER)
         # Count the number of strings inserted into the tree
         self.size = 0
         # Insert each string, if any were given
@@ -88,7 +88,7 @@ class PrefixTree:
             for i in range(index, len(string)):
                 # returned, add a new child node of the node returned
                 next_char = string[i]
-                new_node = PrefixTreeNode(next_char)
+                new_node = MWayTreeNode(next_char)
                 current_node.add_child(next_char, new_node)
                 # then move the current node to its child
                 current_node = new_node
@@ -234,8 +234,8 @@ class PrefixTree:
             raise ValueError('Word is not found and cannot be deleted.')
 
 
-class CompactPrefixTree(PrefixTree):
-    """CompactPrefixTree: subclass of PrefixTree, where each node stores the
+class MWayTree(PrefixTree):
+    """MWayTree: subclass of PrefixTree, where each node stores the
        full, unique id number of a person in the Experiment.
 
     """
@@ -245,8 +245,8 @@ class CompactPrefixTree(PrefixTree):
         """Initialize this prefix tree and insert the given ids, if any."""
         # Create a new root node with the start character
         if virus_name is None:
-            virus_name = CompactPrefixTree.START
-        self.root = PrefixTreeNode(virus_name)
+            virus_name = MWayTree.START
+        self.root = MWayTreeNode(virus_name)
         # Count the number of ids inserted into the tree
         self.size = 0
         # Insert each id, if any were given
@@ -273,7 +273,7 @@ class CompactPrefixTree(PrefixTree):
             parent_node = self._find_node(parent_id)
             assert parent_node is not None
             # add the newly infected person's id in
-            child_node = PrefixTreeNode(child_id)
+            child_node = MWayTreeNode(child_id)
             parent_node.add_child(child_id, child_node)
 
     def _find_node(self, id):

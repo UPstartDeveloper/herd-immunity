@@ -2,12 +2,12 @@
 '''
 Credit to Alan Davis for providing the starter code used in implemennting
 this class:
-https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/prefixtreenode.py
+https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/MWayTreeNode.py
 '''
 
 
-class PrefixTreeNode:
-    """PrefixTreeNode: A node for use in a prefix tree that stores a single
+class MWayTreeNode:
+    """MWayTreeNode: A node for use in a prefix tree that stores a single
        character from a string and a structure of children nodes below it,
        which associates the next character in a string to the next node along
        its path from the tree's root node to a terminal node that marks the end
@@ -24,7 +24,7 @@ class PrefixTreeNode:
         # Character that this node represents
         self.character = character
         # Data structure to associate character keys to children node values
-        self.children = PrefixTreeNode.CHILDREN_TYPE()
+        self.children = MWayTreeNode.CHILDREN_TYPE()
         # Marks if this node terminates a string in the prefix tree
         self.terminal = False
 
@@ -79,7 +79,7 @@ class PrefixTreeNode:
 
     def __repr__(self):
         """Return a code representation of this prefix tree node."""
-        return f'PrefixTreeNode({self.character!r})'
+        return f'MWayTreeNode({self.character!r})'
 
     def __str__(self):
         """Return a string view of this prefix tree node."""
