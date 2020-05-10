@@ -18,20 +18,17 @@ class MWayTreeTest(unittest.TestCase):
         # Verify root node
         assert isinstance(tree.root, MWayTreeNode)
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 0
 
     def test_init_with_integer(self):
         tree = MWayTree(ids=[0])
         # Verify root node
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
         # Verify node 0
         node_0 = tree.root.get_child(0)
         assert node_0.character == 0
-        assert node_0.is_terminal() is False
         assert node_0.num_children() == 0
 
     def test_insert_with_integer(self):
@@ -39,13 +36,11 @@ class MWayTreeTest(unittest.TestCase):
         tree.insert('Virus', 0)
         # Verify root node
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(0) is True
         # Verify node 0
         node_0 = tree.root.get_child(0)
         assert node_0.character == 0
-        assert node_0.is_terminal() is False
         assert node_0.num_children() == 0
         assert node_0.has_child(1) is False
 
@@ -55,13 +50,11 @@ class MWayTreeTest(unittest.TestCase):
         tree.insert(tree.root.character, 123)
         # Verify root node
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
         # Verify new node 123
         node_123 = tree.root.get_child(123)
         assert node_123.character == 123
-        assert node_123.is_terminal() is False
         assert node_123.num_children() == 0
         assert node_123.has_child('B') is False
 
@@ -69,12 +62,10 @@ class MWayTreeTest(unittest.TestCase):
         tree.insert(123, 234)
         # Verify root node again
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 1
         assert tree.root.has_child(123) is True
         # Verify node 123 again
         assert node_123.character == 123
-        assert node_123.is_terminal() is False
         assert node_123.num_children() == 1
         assert node_123.has_child(234) is True
 
@@ -82,13 +73,11 @@ class MWayTreeTest(unittest.TestCase):
         tree.insert('Virus', 456)
         # Verify root node again
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 2
         assert tree.root.has_child(123) is True
         assert tree.root.has_child(456) is True
         # Verify node 123 again
         assert node_123.character == 123
-        assert node_123.is_terminal() is False
         assert node_123.num_children() == 1  # Node 0 still has one child
         assert node_123.has_child(234) is True
 
@@ -96,14 +85,12 @@ class MWayTreeTest(unittest.TestCase):
         tree.insert(456, 567)
         # Verify root node again
         assert tree.root.character == MWayTree.START
-        assert tree.root.is_terminal() is False
         assert tree.root.num_children() == 2  # Root node now has two children
         assert tree.root.has_child(123) is True  # Node 0 is still its child
         assert tree.root.has_child(123) is True  # Node 'X' is its new child
         # Verify new node 567
         node_567 = tree.root.get_child(456).get_child(567)
         assert node_567.character == 567
-        assert node_567.is_terminal() is False
         assert node_567.num_children() == 0
         assert node_567.has_child(678) is False
 

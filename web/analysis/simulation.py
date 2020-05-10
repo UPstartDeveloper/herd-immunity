@@ -296,10 +296,10 @@ class Simulation(object):
 
            Returns:
            list: an array of the bar graphs for each step
-                 arranged in tuples: contains both the graph and its terminal
-                                     output (str)
+                 arranged in tuples: contains both the graph and its
+                                     text-based output (str)
         """
-        results = list()  # stores graphs and terminal output
+        results = list()  # stores graphs and text-based output
         time_step_counter = 1
         simulation_should_continue = 0
         should_continue = None
@@ -325,7 +325,7 @@ class Simulation(object):
             for person in alive:
                 if person not in vaccinated and person.infection:
                     uninfected.append(person)
-            # store the terminal output in a str
+            # store the text-based output in a str
             step_report = (f"Time step: {time_step_counter}, " +
                            f"total infected: {self.total_infected}, " +
                            f"current infected: {self.current_infected()}," +

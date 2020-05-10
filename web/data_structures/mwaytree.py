@@ -1,4 +1,4 @@
-m-way#!python3
+#!python3
 '''
 Credit to Alan Davis for providing the starter code used in implementing
 this class:

@@ -8,7 +8,7 @@ https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/MWa
 
 class MWayTreeNode:
     """MWayTreeNode: A node for use in a m-way tree that stores a
-       single data value. Can have up to m - 1 siblings.
+       single data value. Can have up to (m - 1) siblings.
 
     """
     # Choose an appropriate data structure to store children nodes in
@@ -16,21 +16,11 @@ class MWayTreeNode:
 
     def __init__(self, character=None):
         """Initialize this m-way tree node with the given character value, an
-        empty structure of children nodes, and a boolean terminal property."""
+        empty structure of children nodes."""
         # Character that this node represents
         self.character = character
         # Data structure to associate character keys to children node values
         self.children = MWayTreeNode.CHILDREN_TYPE()
-        # Marks if this node terminates a string, if used in a m-way tree
-        self.terminal = False
-
-    def is_terminal(self):
-        """Return True if this m-way tree node terminates a string.
-
-           Runtime Complexity: O(1)
-
-        """
-        return (self.terminal is True)
 
     def num_children(self):
         """Return the number of children nodes this m-way tree node has.

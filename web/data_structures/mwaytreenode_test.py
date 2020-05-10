@@ -20,9 +20,6 @@ class MWayTreeNodeStringTest(unittest.TestCase):
         assert isinstance(node.children, MWayTreeNode.CHILDREN_TYPE)
         assert len(node.children) == 0
         assert node.children == MWayTreeNode.CHILDREN_TYPE()
-        # Verify terminal boolean
-        assert isinstance(node.terminal, bool)
-        assert node.terminal is False
 
     def test_child_methods(self):
         # Create node 'A' and verify it does not have any children
@@ -66,9 +63,6 @@ class MWayTreeNodeIntegerTest(unittest.TestCase):
         assert isinstance(node.children, MWayTreeNode.CHILDREN_TYPE)
         assert len(node.children) == 0
         assert node.children == MWayTreeNode.CHILDREN_TYPE()
-        # Verify terminal boolean
-        assert isinstance(node.terminal, bool)
-        assert node.terminal is False
 
     def test_child_methods(self):
         # Create node 'A' and verify it does not have any children
