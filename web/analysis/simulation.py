@@ -4,8 +4,7 @@ from .person import Person
 from .logger import Logger
 from .virus import Virus
 from . import visualizer
-from data_structures.prefixtree import CompactPrefixTree, PrefixTreeNode
-# from simulator.models import Experiment, TimeStep
+from data_structures.mwaytree import MWayTree, MWayTreeNode
 random.seed(42)
 
 
@@ -367,7 +366,7 @@ class WebSimulation(Simulation):
         self.next_person_id = pop_size  # Int
         self.virus = virus  # Virus object
         self.initial_infected = initial_infected  # Int
-        self.total_infected = CompactPrefixTree(virus_name=virus.name)
+        self.total_infected = MWayTree(virus_name=virus.name)
         self.vacc_percentage = vacc_percentage  # float between 0 and 1
         self.total_dead = 0  # Int
         self.newly_infected = []

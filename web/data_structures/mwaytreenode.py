@@ -7,7 +7,7 @@ https://github.com/Make-School-Courses/CS-2.1-Trees-Sorting/blob/master/Code/MWa
 
 
 class MWayTreeNode:
-    """MWayTreeNode: A node for use in a prefix or m-way tree that stores a
+    """MWayTreeNode: A node for use in a m-way tree that stores a
        single data value. Can have up to m - 1 siblings.
 
     """
@@ -15,17 +15,17 @@ class MWayTreeNode:
     CHILDREN_TYPE = dict  # or list
 
     def __init__(self, character=None):
-        """Initialize this prefix tree node with the given character value, an
+        """Initialize this m-way tree node with the given character value, an
         empty structure of children nodes, and a boolean terminal property."""
         # Character that this node represents
         self.character = character
         # Data structure to associate character keys to children node values
         self.children = MWayTreeNode.CHILDREN_TYPE()
-        # Marks if this node terminates a string, if used in a prefix tree
+        # Marks if this node terminates a string, if used in a m-way tree
         self.terminal = False
 
     def is_terminal(self):
-        """Return True if this prefix tree node terminates a string.
+        """Return True if this m-way tree node terminates a string.
 
            Runtime Complexity: O(1)
 
@@ -33,7 +33,7 @@ class MWayTreeNode:
         return (self.terminal is True)
 
     def num_children(self):
-        """Return the number of children nodes this prefix tree node has.
+        """Return the number of children nodes this m-way tree node has.
 
            Runtime Complexity: O(n)
 
@@ -41,7 +41,7 @@ class MWayTreeNode:
         return len(self.children.keys())
 
     def has_child(self, character):
-        """Return True if this prefix tree node has a child node that
+        """Return True if this m-way tree node has a child node that
            represents the given character amongst its children.
 
            Runtime Complexity: O(n)
@@ -50,7 +50,7 @@ class MWayTreeNode:
         return (character in self.children.keys())
 
     def get_child(self, character):
-        """Return this prefix tree node's child node that represents the given
+        """Return this m-way tree node's child node that represents the given
            character if it is amongst its children, or raise ValueError if not.
 
            Runtime Complexity: O(n)
@@ -74,9 +74,9 @@ class MWayTreeNode:
             raise ValueError(f'Child exists for character {character!r}')
 
     def __repr__(self):
-        """Return a code representation of this prefix tree node."""
+        """Return a code representation of this m-way tree node."""
         return f'MWayTreeNode({self.character!r})'
 
     def __str__(self):
-        """Return a string view of this prefix tree node."""
+        """Return a string view of this m-way tree node."""
         return f'({self.character})'

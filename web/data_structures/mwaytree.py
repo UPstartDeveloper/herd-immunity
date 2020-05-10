@@ -1,4 +1,4 @@
-#!python3
+m-way#!python3
 '''
 Credit to Alan Davis for providing the starter code used in implementing
 this class:
@@ -9,14 +9,15 @@ from queue import Queue
 
 
 class MWayTree:
-    """MWayTree: subclass of PrefixTree, where each node stores the
+    """MWayTree: each node stores the
        full, unique id number of a person in the Experiment.
+       Root represents the virus itself
 
     """
     START = 'Virus'
 
     def __init__(self, virus_name=None, ids=None):
-        """Initialize this prefix tree and insert the given ids, if any."""
+        """Initialize this m-way tree and insert the given ids, if any."""
         # Create a new root node with the start character
         if virus_name is None:
             virus_name = MWayTree.START
@@ -29,7 +30,7 @@ class MWayTree:
                 self.insert(virus_name, id)
 
     def contains(self, id):
-        '''Return True if this prefix tree contains the given id.'''
+        '''Return True if this m-way tree contains the given id.'''
         ids = self.ids()
         # see if id matches the values of any of the nodes
         for node in ids:
@@ -38,7 +39,7 @@ class MWayTree:
         return False
 
     def is_empty(self):
-        """Return True if this prefix tree is empty (contains no strings).
+        """Return True if this m-way tree is empty (contains no strings).
 
            Runtime Complexity:
            O(1), because the lookup and comparision
@@ -87,9 +88,9 @@ class MWayTree:
         return None
 
     def _traverse_pre_order(self, node, id, visit):
-        """Traverse this prefix tree with recursive depth-first traversal.
-           Start at the given node with the given prefix representing its path
-           in this prefix tree and visit each node with the given visit
+        """Traverse this m-way tree with recursive depth-first traversal.
+           Start at the given node with the given m-way representing its path
+           in this m-way tree and visit each node with the given visit
            function.
 
         """
@@ -104,14 +105,14 @@ class MWayTree:
         """Return a list of all ids that fall under a specific id.
 
         """
-        # Create a list of completions in prefix tree
+        # Create a list of completions in m-way tree
         completions = []
         # init node to start traversal from
         node = self._find_node(id)
         # if node has an empty string, there are no completions
         if node is not None:
             self._traverse_pre_order(node, id, completions.append)
-        # add remove words equal to the prefix
+        # add remove words equal to the m-way
         return completions
 
     def _traverse_level_order(self, start_node, visit):
@@ -135,78 +136,12 @@ class MWayTree:
                 queue.put(node.children[next_node])
 
     def ids(self):
-        """Return a list of all ids stored in this prefix tree.
+        """Return a list of all ids stored in this m-way tree.
            Implements breadth first search.
 
         """
-        # Create a list of all ids in prefix tree
+        # Create a list of all ids in m-way tree
         all_ids = []
         self._traverse_level_order(self.root, all_ids.append)
         print(all_ids)
         return all_ids
-
-
-# test script for PrefixTree class
-def create_prefix_tree(strings):
-    print(f'strings: {strings}')
-
-    tree = PrefixTree()
-    print(f'\ntree: {tree}')
-    print(f'root: {tree.root}')
-    print(f'strings: {tree.strings()}')
-
-    print('\nInserting strings:')
-    for string in strings:
-        tree.insert(string)
-        print(f'insert({string!r}), size: {tree.size}')
-
-    print(f'\ntree: {tree}')
-    print(f'root: {tree.root}')
-
-    print('\nSearching for strings in tree:')
-    for string in sorted(set(strings)):
-        result = tree.contains(string)
-        print(f'contains({string!r}): {result}')
-
-    print('\nSearching for strings not in tree:')
-    prefixes = sorted(set(string[:len(string)//2] for string in strings))
-    for prefix in prefixes:
-        if len(prefix) == 0 or prefix in strings:
-            continue
-        result = tree.contains(prefix)
-        print(f'contains({prefix!r}): {result}')
-
-    print('\nCompleting prefixes in tree:')
-    for prefix in prefixes:
-        completions = tree.complete(prefix)
-        print(f'complete({prefix!r}): {completions}')
-
-    print('\nRetrieving all strings:')
-    retrieved_strings = tree.strings()
-    print(f'strings: {retrieved_strings}')
-    matches = set(retrieved_strings) == set(strings)
-    print(f'matches? {matches}')
-
-
-def main():
-    # Simpe test case of string with partial substring overlaps
-    strings = ['ABC', 'ABD', 'A', 'XYZ']
-    create_prefix_tree(strings)
-
-    # Create a dictionary of tongue-twisters with similar words to test with
-    tongue_twisters = {
-        'Seashells': 'Shelly sells seashells by the sea shore'.split(),
-        'Peppers': 'Peter Piper picked a peck of pickled peppers'.split(),
-        'Woodchuck': ('How much wood would a wood chuck chuck'
-                      ' if a wood chuck could chuck wood').split()
-    }
-    # Create a prefix tree with the similar words in each tongue-twister
-    for name, strings in tongue_twisters.items():
-        print(f'{name} tongue-twister:')
-        create_prefix_tree(strings)
-        if len(tongue_twisters) > 1:
-            print('\n' + '='*80 + '\n')
-
-
-if __name__ == '__main__':
-    main()  # script used to test if PrefixTree works with expected test inputs

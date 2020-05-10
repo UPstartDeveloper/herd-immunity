@@ -5,7 +5,7 @@ from analysis.virus import Virus
 from web import settings
 from django.utils import timezone
 from django.urls import reverse
-from data_structures.prefixtree import CompactPrefixTree, PrefixTreeNode
+from data_structures.mwaytree import MWayTree, MWayTreeNode
 from queue import Queue
 from django.contrib.postgres.fields import ArrayField
 
@@ -98,9 +98,9 @@ class Experiment(models.Model):
             # Set the node's children to point to their parent
             infected_by_parent = list()
             for node in parent_node.children:
-                # grab instance of PrefixTreeNode
+                # grab instance of MWayTreeNode
                 child = parent_node.children[node]
-                # enqueue the PrefixTreeNode to be the next parent
+                # enqueue the MWayTreeNode to be the next parent
                 queue.put(child)
                 # prepare the InfectedNodes for initialization
                 next_node = self.make_basic_node(child)
