@@ -1,6 +1,6 @@
 from django.db import models
 from analysis.person import Person
-from analysis.simulation import WebSimulation
+from analysis.web_simulation import WebSimulation
 from analysis.virus import Virus
 from web import settings
 from django.utils import timezone
