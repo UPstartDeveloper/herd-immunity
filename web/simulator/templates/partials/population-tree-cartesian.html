@@ -1,4 +1,4 @@
-<!-- simulator/templates/partials/population-tree.html -->
+<!-- simulator/templates/partials/population-tree-cartesian.html -->
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
     $(document).ready(function(){
@@ -19,6 +19,7 @@
     })
 
     // Make a Tree by using D3: https://observablehq.com/@d3/collapsible-tree
+
     let treeChart = data => {
 
         // tree params
@@ -87,5 +88,5 @@
               return svg.node();
             }
             chart();
-    };
+        }
 </script>
