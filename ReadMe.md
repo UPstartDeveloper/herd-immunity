@@ -1,6 +1,10 @@
 # Herd Immunity Simulation
 ![Brandmark Image](https://i.postimg.cc/52ZwGXYG/Screen-Shot-2020-04-23-at-10-14-06-AM.png)
 
+## Demo Video
+
+To see how the simulator works, check out this [1 minute video on YouTube](https://youtu.be/rLb2eaMichE).
+
 ## Table of Contents
 1. [Goals](#goals)
     - [Rules](#rules)
